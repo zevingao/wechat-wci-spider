@@ -2,18 +2,13 @@
 
 抓取搜狗微信搜索引擎微信公众号传播力WCI项目，提供代理ip。支持py2和py3两个版本。
 <br/>
-详细使用方式:
-配置
+详细使用方式:<br/>
+配置proxypool下的数据库配置以及自定义常量，相关配置请参考[IPProxyPool](https://github.com/qiyeboy/IPProxyPool)<br/>
+配置config.json 数据库相关配置以及搜狗通行证账号密码以及要抓取的微信公众号<br/>
+由于项目用到selenium,请前往[下载](http://chromedriver.storage.googleapis.com/index.html)Chromedriver并配置到环境变量，版本根据自己chrome浏览器版本配置，建议使用2.6版本<br/>
+配置完成打开proxypool，python IPProxy.py 启动代理池；然后python wechat.py启动爬虫
 <br/>
-最近正在为IPProxyPool添加二级代理，方便调度。大家可以关注我的公众号，更新我会及时通知。
-<br/>
-####我的微信公众号:
-<br/>
-![](qiye2.jpg)
-<br/>
-希望大家提供更多的代理网站，现在爬取的好用的代理ip还是太少。
-<br/>
-同时感谢[super1-chen](https://github.com/super1-chen),[fancoo](https://github.com/fancoo),[Leibnizhu](https://github.com/Leibnizhu)对项目的贡献。
+感谢[qiyeboy](https://github.com/qiyeboy/IPProxyPool)开源的代理池项目。
 <br/>
 ##项目依赖
 ####Ubuntu,debian
@@ -21,8 +16,8 @@
 1.安装sqlite数据库(一般系统内置):
 apt-get install sqlite3
 <br/>
-2.安装requests,chardet,web.py,gevent:
-pip install requests chardet web.py sqlalchemy gevent
+2.安装requests,chardet,web.py,gevent,bs4,selenium:
+pip install requests chardet web.py sqlalchemy gevent bs4 selenium
 <br/>
 3.安装lxml:
 apt-get install python-lxml
@@ -36,7 +31,7 @@ apt-get install python-lxml
 ####Windows
 1.下载[sqlite](http://www.sqlite.org/download.html),路径添加到环境变量
 <br/>
-2.安装requests,chardet,web.py,gevent:
+2.安装requests,chardet,web.py,gevent,bs4,selenium:
 pip install requests chardet web.py sqlalchemy gevent
 <br/>
 3.安装lxml:
@@ -93,7 +88,7 @@ try:
 except Exception,e:
     raise Con_DB_Fail
 ```
-有感兴趣的朋友，可以将Redis的实现方式添加进来。
+
 
 ## 如何使用
 
@@ -104,10 +99,10 @@ $ git clone
 切换工程目录
 
 ```
-$ cd IPProxyPool
+$ cd wechat-wci-spider/proxypool
 ```
 
-运行脚本
+运行代理池脚本
 
 ```
 python IPProxy.py
@@ -120,140 +115,49 @@ IPProxyPool----->>>>>>>>db exists ip:0
 IPProxyPool----->>>>>>>>now ip num < MINNUM,start crawling...
 IPProxyPool----->>>>>>>>Success ip num :134,Fail ip num:7882
 ```
+运行爬虫脚本
+```
+cd ..
+```
 
-## API 使用方法
+```
+python wechat.py
+```
+成功运行后，自动打开浏览器登录sogou,并打印抓取信息
+```
+http://weixin.sogou.com/weixin?type=2&ie=utf8&tsn=5&interation=null&from=tool&usip=sqgxyxmt&wxid=oIWsFtwSrbd-iUQ6MI2bWeQT3LB0&query=sqgxyxmt&ft=2016-12-01&et=2016-12-31
+27
+http://weixin.sogou.com/weixin?type=2&ie=utf8&tsn=5&interation=null&from=tool&usip=sqgxyxmt&wxid=oIWsFtwSrbd-iUQ6MI2bWeQT3LB0&query=sqgxyxmt&ft=2016-12-01&et=2016-12-31&page=1
+<p class="txt-info" id="sogou_vr_11002601_summary_0">为进一步加强现代大学生对新媒体的认识与了解,跟进时代的步伐,商丘工学院于2016年12月2日在生活区广场举行了商丘工学院十佳...</p>
+<p class="txt-info" id="sogou_vr_11002601_summary_1" style="display:none">爱心募捐,商丘工学院在行动】在听闻小梦冉事件后,商丘工学院公寓自律委员会和新媒体联盟携手发起为曹梦冉小姑娘募捐活动,...</p>
+<p class="txt-info" id="sogou_vr_11002601_summary_2">深化“两学一做”学习教育  让党旗在民办高校高高飘扬——党委书记刘兵为全校党务工作者和师生党员上党课12月8日晚,党委书记刘...</p>
+<p class="txt-info" id="sogou_vr_11002601_summary_3">为进一步加强我校学生干部队伍建设,提高学生干部的品德修养和综合素质.11月30日晚,商丘工学院“青年马克思主义培养工程”...</p>
+<p class="txt-info" id="sogou_vr_11002601_summary_4">12月8日下午,商丘工学院校长李纪轩教授在明德讲堂作了题为“《老子》的人生智慧”专题讲座.副校长王峰、范玉峰,二级学院(...</p>
+<p class="txt-info" id="sogou_vr_11002601_summary_5" style="display:none">12月21日晚,由学生事务服务中心主办,医学院承办,中国移动商丘分公司协办的商丘工学院第六届“移动杯”辅导员职业能力大赛闭...</p>
+<p class="txt-info" id="sogou_vr_11002601_summary_6">12月28日下午,由安阳师范学院副校长张建国任组长,河南中医药大学保卫处处长刘明、安阳师范学院科长苗安民为成员的河南省高校...</p>
+<p class="txt-info" id="sogou_vr_11002601_summary_7">12月8日中午,商丘工学院新媒体联盟暨校院两级党委系统学生组织聘书颁发仪式在明德讲堂举行.校长助理刘永福出席了此次会议,...</p>
+<p class="txt-info" id="sogou_vr_11002601_summary_8">捡到笔记本电脑 保洁员等了四小时校方发动师生在全校寻找失主,次日终于完璧归赵晚报记者 成绍峰 来源:商丘网—京九晚报 11月29...</p>
+<p class="txt-info" id="sogou_vr_11002601_summary_9">来源:人民日报【商丘工学院“法制知多少”校园采访】在全国法制宣传日即将到来之际,为增强广大学生的法律意识和法治观念,巩...</p>
+http://weixin.sogou.com/weixin?type=2&ie=utf8&tsn=5&interation=null&from=tool&usip=sqgxyxmt&wxid=oIWsFtwSrbd-iUQ6MI2bWeQT3LB0&query=sqgxyxmt&ft=2016-12-01&et=2016-12-31&page=2
+<p class="txt-info" id="sogou_vr_11002601_summary_0" style="display:none">崔国莲介绍2012年06月至2013年11月  园林设计师 内蒙古绿华园林工程有限公司参与项目:1.敕勒川草原文化旅游区草原部落景观设...</p>
 
-#### 第一种模式
 ```
-GET /
-```
-这种模式用于查询代理ip数据，同时加入评分机制，返回数据的顺序是按照评分由高到低，速度由快到慢制定的。
-####参数
 
-
-| Name | Type | Description |
-| ----| ---- | ---- |
-| types | int | 0: 高匿,1:匿名,2 透明 |
-| protocol | int | 0: http, 1 https, 2 http/https |
-| count | int | 数量 |
-| country | str | 取值为 国内, 国外 |
-| area | str | 地区 |
-
-
-
-#### 例子
-#####IPProxys默认端口为8000，端口可以在config.py中配置。
-#####如果是在本机上测试：
-1.获取5个ip地址在中国的高匿代理：http://127.0.0.1:8000/?types=0&count=5&country=国内
-<br/>
-2.响应为JSON格式，按照评分由高到低，响应速度由高到低的顺序，返回数据：
-<br/>
-```
-[["122.226.189.55", 138, 10], ["183.61.236.54", 3128, 10], ["61.132.241.109", 808, 10], ["183.61.236.53", 3128, 10], ["122.227.246.102", 808, 10]]
-```
-<br/>
-以["122.226.189.55", 138, 10]为例，第一个元素是ip,第二个元素是port，第三个元素是分值score。
-```
-import requests
-import json
-r = requests.get('http://127.0.0.1:8000/?types=0&count=5&country=国内')
-ip_ports = json.loads(r.text)
-print ip_ports
-ip = ip_ports[0][0]
-port = ip_ports[0][1]
-proxies={
-    'http':'http://%s:%s'%(ip,port),
-    'https':'http://%s:%s'%(ip,port)
-}
-r = requests.get('http://ip.chinaz.com/',proxies=proxies)
-r.encoding='utf-8'
-print r.text
-```
-#### 第二种模式
-```
-GET /delete
-```
-这种模式用于方便用户根据自己的需求删除代理ip数据
-####参数
+## 使用说明
 
 
-| Name | Type | Description |
-| ----| ---- | ---- |
-| ip | str | 类似192.168.1.1 |
-| port | int | 类似 80 |
-| types | int |  0: 高匿,1:匿名,2 透明 |
-| protocol | int | 0: http, 1 https, 2 http/https |
-| count | int | 数量 |
-| country | str | 取值为 国内, 国外 |
-| area | str | 地区 |
-大家可以根据指定以上一种或几种方式删除数据。
-#### 例子
-#####如果是在本机上测试：
-1.删除ip为120.92.3.127的代理：http://127.0.0.1:8000/delete?ip=120.92.3.127
-<br/>
-2.响应为JSON格式，返回删除的结果为成功,失败或者返回删除的个数,类似如下的效果：
-
-["deleteNum", "ok"]或者["deleteNum", 1]
-```
-import requests
-r = requests.get('http://127.0.0.1:8000/delete?ip=120.92.3.127')
-print r.text
-```
+该项目用于采集公众号每个月的微信影响力指数，所以结果是按月来的，如有别的需求请自行修改。<br/>
+cookies失效会自动打开浏览器登录获得cookies，所以会不定时打开网页并自动关闭，这个是正常现象。
 
 ## TODO
-1.添加二级代理，简化爬虫配置
+1.代码执行效率太低，考虑下一步使用多进程以及协程
 <br/>
 
 
 ## 更新进度
 
 
------------------------------2017-1-16----------------------------
+-----------------------------2017-3-17----------------------------
 <br/>
-1.将py2和py3版本合并，并且兼容
-<br/>
-2.修复pymongo查询bug
-<br/>
------------------------------2017-1-11----------------------------
-<br/>
-1.使用httpbin.org检测代理ip的高匿性
-<br/>
-2.使用 国内 和 国外 作为country的查询条件
-<br/>
-3.修改types和protocol参数，一定要注意protocol的使用，试试访问http://www.baidu.com和https://www.baidu.com
-<br/>
-4.美化代码风格
-<br/>
------------------------------2016-12-11----------------------------
-####大规模重构，主要包括以下几个方面：
-1.使用多进程+协程的方式，将爬取和验证的效率提高了50倍以上，可以在几分钟之内获取所有的有效IP
-<br/>
-2.使用web.py作为API服务器，重构HTTP接口
-<br/>
-3.增加Mysql,MongoDB等数据库的适配
-<br/>
-4.增加了三个代理网站
-<br/>
-5.增加评分机制，评比稳定的ip
-<br/>
-6.支持python3
-<br/>
------------------------------2016-11-24----------------------------
-<br/>
-1.增加chardet识别网页编码
-<br/>
-2.突破66ip.cn反爬限制
-<br/>
------------------------------2016-10-27----------------------------
-<br/>
-1.增加对代理的检测，测试是否能真正访问到网址，实现代理
-<br/>
-2.添加通过正则表达式和加载插件解析网页的方式
-<br/>
-3.又增加一个新的代理网站
-<br/>
-
------------------------------2016-7-20----------------------------
-<br/>
-1.修复bug ,将数据库进行压缩
+1.初始化项目
 <br/>
